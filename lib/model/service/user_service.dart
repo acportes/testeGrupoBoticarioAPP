@@ -11,64 +11,51 @@ import 'package:provider/provider.dart';
 import '../app_model.dart';
 
 class UserService {
-  static final String USERS = "USERS";
-  static final String PRIMEIRO_ACESSO = "PRIMEIRO_ACESSO";
-
-  Future<List<Usuario>> LoadUsers() async {
-    var json = await Prefs.getString(USERS);
-
-    if (json.isEmpty) {
-      return listFakeUsers();
-    } else {
-      var usersDecoded = convert.json.decode(json);
-      var dataUser = DataUser.fromJson(usersDecoded);
-      return dataUser.users;
-    }
-  }
-
   Future<DataUser> getUsers(context) async {
-    try {
-      var json = await Prefs.getString(USERS);
+    var appJson = await Prefs.getString(AppModel.APP_DATA);
 
-      if (json.isEmpty) {
-        List<Usuario> listUsuarios = listFakeUsers();
-        DataUser dataUser = DataUser();
-        dataUser.users = listUsuarios;
-        return dataUser;
-      } else {
-        var usersDecoded = convert.json.decode(json);
-        var dataUser = DataUser.fromJson(usersDecoded);
-        return dataUser;
-      }
-    } catch (e) {
-      throw e;
+    if (appJson.isEmpty) {
+      List<Usuario> listUsuarios = listFakeUsers();
+      DataUser dataUser = DataUser();
+      dataUser.users = listUsuarios;
+      return dataUser;
+    } else {
+      var usersDecoded = convert.json.decode(appJson);
+      var dataUser = DataUser.fromJson(usersDecoded);
+      return dataUser;
     }
   }
 
-  Future<void> setUsers(DataUser dataUser) async {
-    try {
-      final json = convert.json.encode(dataUser.toJson());
-      Prefs.setString(USERS, json);
-    } catch (e) {
-      throw e;
-    }
+  Future<void> setUsers(dataUser, context) async {
+    Provider.of<AppModel>(context, listen: false).setUsers(dataUser);
   }
 
   Future<Usuario> validateUser(email, senha, context) async {
-    try {
-      AppModel app = Provider.of<AppModel>(context, listen: false);
-      List<Usuario> listUsuarios = app.dataUser.users;
 
-      for (int u = 0; u < listUsuarios.length; u++) {
-        Usuario usuario = listUsuarios[u];
-        if (usuario.senha.toUpperCase() == senha.toUpperCase() &&
-            usuario.email.toUpperCase() == email.toUpperCase()) return usuario;
-      }
+    AppModel app = Provider.of<AppModel>(context, listen: false);
+    List<Usuario> listUsuarios = app.dataUser.users;
 
-      return null;
-    } catch (e) {
-      throw e;
-    }
+    var user = listUsuarios.firstWhere(
+        (u) =>
+            u.senha.toUpperCase() == senha.toString().toUpperCase() &&
+            u.email.toUpperCase() == email.toString().toUpperCase(),
+        orElse: () => null);
+
+    return user;
+  }
+
+  Future<bool> userEmailExists(email, context) async {
+    AppModel app = Provider.of<AppModel>(context, listen: false);
+    List<Usuario> listUsuarios = app.dataUser.users;
+
+    var result = listUsuarios.firstWhere(
+        (u) => u.email.toUpperCase() == email.toString().toUpperCase(),
+        orElse: () => null);
+
+    if(result == null)
+      return false;
+
+    return true;
   }
 
   List<Usuario> listFakeUsers() {
@@ -76,18 +63,20 @@ class UserService {
 
     Usuario usuario1 = Usuario();
     usuario1.id = RandomUtils.generateGUID();
-    usuario1.nome = "André Portes";
-    usuario1.email = "andrecportes@email.com";
+    usuario1.nome = "Luiz Pontes";
+    usuario1.email = "luiz_pontes@email.com";
     usuario1.senha = "1234";
     usuario1.image = "assets/images/ic_male_1.png";
     usuario1.userPosts = List<Posts>();
     Posts post0 = Posts();
     post0.id = RandomUtils.generateGUID();
-    post0.text = "Como manter os cabelos hidratados no verão? A dica é certa: faça hidratação no cabelo! Mantenha a rotina de cuidados e aposte no uso das máscaras capilares, que promovem uma hidratação profunda e intensa nos fios. Existem diversos kits de produtos para cabelo! ";
+    post0.text =
+        "Como manter os cabelos hidratados no verão? A dica é certa: faça hidratação no cabelo! Mantenha a rotina de cuidados e aposte no uso das máscaras capilares, que promovem uma hidratação profunda e intensa nos fios. Existem diversos kits de produtos para cabelo! ";
     post0.date = "20/01/2020 08:40";
     Posts post1 = Posts();
     post1.id = RandomUtils.generateGUID();
-    post1.text = "Como proteger os cabelos no verão? Além de lavar, condicionar e hidratar, você pode apostar em um creme para pentear sem enxágue. O produto deve ser usado preferencialmente nos cabelos limpos e ajuda a desembaraçar e proteger os fios. Alguns produtos ainda ofercem proteção UV!";
+    post1.text =
+        "Como proteger os cabelos no verão? Além de lavar, condicionar e hidratar, você pode apostar em um creme para pentear sem enxágue. O produto deve ser usado preferencialmente nos cabelos limpos e ajuda a desembaraçar e proteger os fios. Alguns produtos ainda ofercem proteção UV!";
     post1.date = "20/01/2020 08:40";
     usuario1.userPosts.add(post0);
     usuario1.userPosts.add(post1);
@@ -102,7 +91,8 @@ class UserService {
     usuario2.userPosts = List<Posts>();
     Posts post2 = Posts();
     post2.id = RandomUtils.generateGUID();
-    post2.text = "O que fazer com o cabelo depois da piscina? Sempre aposte em um bom leave–in para ajudar a proteger os fios da água da piscina. Lave e condicione com o shampoo e condicionador de sua preferência e, após, utilize uma boa máscara de tratamento para recuperar os fios.";
+    post2.text =
+        "O que fazer com o cabelo depois da piscina? Sempre aposte em um bom leave–in para ajudar a proteger os fios da água da piscina. Lave e condicione com o shampoo e condicionador de sua preferência e, após, utilize uma boa máscara de tratamento para recuperar os fios.";
     post2.date = "20/01/2020 08:40";
     usuario2.userPosts.add(post2);
     listUsuario.add(usuario2);
@@ -116,7 +106,8 @@ class UserService {
     usuario3.userPosts = List<Posts>();
     Posts post3 = Posts();
     post3.id = RandomUtils.generateGUID();
-    post3.text = "Meu cabelo ficou seco e com frizz no verão, o que fazer? Para combater estes efeitos indesejados, aposte no cronograma capilar. Você pode investir em uma linha especifica para hidratar e controlar o frizz, que garante que as cutículas fiquem seladas por muito mais tempo!";
+    post3.text =
+        "Meu cabelo ficou seco e com frizz no verão, o que fazer? Para combater estes efeitos indesejados, aposte no cronograma capilar. Você pode investir em uma linha especifica para hidratar e controlar o frizz, que garante que as cutículas fiquem seladas por muito mais tempo!";
     post3.date = "20/01/2020 08:40";
     usuario3.userPosts.add(post3);
     listUsuario.add(usuario3);
@@ -130,7 +121,8 @@ class UserService {
     usuario4.userPosts = List<Posts>();
     Posts post4 = Posts();
     post4.id = RandomUtils.generateGUID();
-    post4.text = "Como cuidar dos cabelos loiros no verão? Sejam naturais ou tingidos, os cabelos loiros precisam de cuidado redobrado no verão! O segredo é investir na hidratação, nunca deixar de usar o creme para pentear, e a dica de ouro: usar um produto com fator de proteção.";
+    post4.text =
+        "Como cuidar dos cabelos loiros no verão? Sejam naturais ou tingidos, os cabelos loiros precisam de cuidado redobrado no verão! O segredo é investir na hidratação, nunca deixar de usar o creme para pentear, e a dica de ouro: usar um produto com fator de proteção.";
     post4.date = "20/01/2020 08:40";
     usuario4.userPosts.add(post4);
     listUsuario.add(usuario4);
@@ -144,12 +136,12 @@ class UserService {
     usuario5.userPosts = List<Posts>();
     Posts post5 = Posts();
     post5.id = RandomUtils.generateGUID();
-    post5.text = "Meu cabelo desbotou no verão, e agora? Você não cuidou do cabelo no verão e os fios coloridos desbotaram? Calma que a gente te dá aquela forcinha! Neste caso, você pode investir em um revitalizante de cor para recuperar a vivacidade dos fios e o tom que você deseja.";
+    post5.text =
+        "Meu cabelo desbotou no verão, e agora? Você não cuidou do cabelo no verão e os fios coloridos desbotaram? Calma que a gente te dá aquela forcinha! Neste caso, você pode investir em um revitalizante de cor para recuperar a vivacidade dos fios e o tom que você deseja.";
     post5.date = "20/01/2020 08:40";
     usuario5.userPosts.add(post5);
     listUsuario.add(usuario5);
 
     return listUsuario;
   }
-
 }

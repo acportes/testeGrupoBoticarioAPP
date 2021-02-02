@@ -1,8 +1,10 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:microblogging_boticario/controller/users_controller.dart';
 import 'package:microblogging_boticario/model/app_model.dart';
+import 'package:microblogging_boticario/model/domain/posts.dart';
 import 'package:microblogging_boticario/model/domain/user.dart';
-import 'package:microblogging_boticario/utils/alerts.dart';
 import 'package:microblogging_boticario/utils/app_colors.dart';
 import 'package:microblogging_boticario/utils/textFieldDecoration.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,8 @@ class CadastroUsuarioPage extends StatefulWidget {
 class _CadastroUsuarioPageState extends State<CadastroUsuarioPage>
     with TickerProviderStateMixin {
   AnimationController animController;
+
+  Size get size => MediaQuery.of(context).size;
 
   UsersController controller = UsersController();
 
@@ -35,37 +39,42 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage>
   @override
   Widget build(BuildContext context) {
     AppModel app = Provider.of<AppModel>(context, listen: true);
+
     return AnimatedBuilder(
       animation: animController,
       builder: (_, child) {
         return Container(
+          width: ScreenUtil().setWidth(size.width),
+          height: ScreenUtil().setHeight(size.height),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 32, top: 32),
+                padding: const EdgeInsets.only(top: 32),
                 child: Text(
                   "Registro",
                   style: TextStyle(
                     color: AppColors.getPrimaryColor(),
                     fontWeight: FontWeight.bold,
-                    fontSize: 30,
+                    fontSize:
+                        ScreenUtil().setSp(30, allowFontScalingSelf: true),
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 32.0, top: 8),
+                padding: const EdgeInsets.only(left: 16,top: 16, right: 16),
                 child: Text(
                   "Registre um novo usuário para que ele possa cadastrar, editar e excluir novos posts.",
                   style: TextStyle(
                     color: Colors.black.withOpacity(0.3),
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize:
+                        ScreenUtil().setSp(20, allowFontScalingSelf: true),
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 32.0, top: 32),
+                padding: const EdgeInsets.only(top: 32),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -76,21 +85,23 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage>
                         "Nome",
                         style: TextStyle(
                           color: AppColors.getPrimaryDarkColor(),
-                          fontSize: 15,
+                          fontSize: ScreenUtil()
+                              .setSp(15, allowFontScalingSelf: true),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Container(
-                          width: 300,
-                          height: 60,
+                          width: ScreenUtil().setWidth(300),
+                          height: ScreenUtil().setHeight(60),
                           child: TextFormField(
                             controller: _controllerNome,
                             validator: _validateNome,
                             keyboardType: TextInputType.text,
                             maxLength: 30,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: ScreenUtil()
+                                  .setSp(16, allowFontScalingSelf: true),
                             ),
                             decoration: TextFieldDecoration.FieldDecoration(),
                           ),
@@ -100,21 +111,23 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage>
                         "E-mail",
                         style: TextStyle(
                           color: AppColors.getPrimaryDarkColor(),
-                          fontSize: 15,
+                          fontSize: ScreenUtil()
+                              .setSp(15, allowFontScalingSelf: true),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Container(
-                          width: 300,
-                          height: 60,
+                          width: ScreenUtil().setWidth(300),
+                          height: ScreenUtil().setHeight(60),
                           child: TextFormField(
                             controller: _controllerEmail,
                             validator: _validateEmail,
                             keyboardType: TextInputType.text,
                             maxLength: 30,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: ScreenUtil()
+                                  .setSp(16, allowFontScalingSelf: true),
                             ),
                             decoration: TextFieldDecoration.FieldDecoration(),
                           ),
@@ -130,8 +143,8 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage>
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Container(
-                          width: 300,
-                          height: 60,
+                          width: ScreenUtil().setWidth(300),
+                          height: ScreenUtil().setHeight(60),
                           child: TextFormField(
                             controller: _controllerSenha,
                             validator: _validateSenha,
@@ -139,7 +152,8 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage>
                             maxLength: 30,
                             obscureText: true,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: ScreenUtil()
+                                  .setSp(16, allowFontScalingSelf: true),
                             ),
                             decoration: TextFieldDecoration.FieldDecoration(),
                           ),
@@ -165,14 +179,15 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage>
                           : Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Container(
-                                width: 300,
-                                height: 45,
+                                width: ScreenUtil().setWidth(300),
+                                height: ScreenUtil().setHeight(45),
                                 child: RaisedButton(
                                   color: AppColors.getPrimaryColor(),
                                   child: Text(
                                     "SALVAR",
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: ScreenUtil().setSp(16,
+                                          allowFontScalingSelf: true),
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -204,6 +219,10 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage>
 
   String _validateEmail(String text) {
     if (text.isEmpty) return "É necessário informar um e-mail";
+
+    var isEmailValid = EmailValidator.validate(text);
+    if (!isEmailValid) return "E-mail inválido!";
+
     return null;
   }
 
@@ -228,15 +247,30 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage>
       user.nome = nome;
       user.email = email;
       user.senha = senha;
+      user.userPosts = List<Posts>();
 
-      await controller.setUser(user, context);
-      alert(context, "Sucesso", "Usuário salvo com sucesso!",
-          TipoDialog.DIALOG_INFORMACAO);
+      await controller.setNewUser(user, context);
+
       app.setOnHome();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Usuário cadastrado com sucesso!",
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(20),
+          ),
+        ),
+        duration: const Duration(seconds: 5),
+      ));
     } catch (e) {
-      String mensagem = e.toString();
-      alert(context, "Erro", "Ocorreu um erro ao salvar o usuário : $mensagem",
-          TipoDialog.DIALOG_ERRO);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          e.toString().replaceAll("Exception: ", ""),
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(20),
+          ),
+        ),
+        duration: const Duration(seconds: 5),
+      ));
     } finally {
       setState(() {
         _progress = false;
@@ -244,58 +278,3 @@ class _CadastroUsuarioPageState extends State<CadastroUsuarioPage>
     }
   }
 }
-
-/*
-
-                      Text(
-                        "Email",
-                        style: TextStyle(
-                          color: AppColors.getPrimaryDarkColor(),
-                          fontSize: 15,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: Container(
-                          width: 300,
-                          height: 60,
-                          child: TextFormField(
-                            enabled: _progress == true ? false : true,
-                            controller: _ctrlEmail,
-                            validator: _validateEmail,
-                            keyboardType: TextInputType.text,
-                            maxLength: 30,
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                            decoration: TextFieldDecoration.FieldDecoration(),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "Senha",
-                        style: TextStyle(
-                          color: AppColors.getPrimaryDarkColor(),
-                          fontSize: 15,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: Container(
-                          width: 300,
-                          height: 60,
-                          child: TextFormField(
-                            enabled: _progress == true ? false : true,
-                            controller: _ctrlSenha,
-                            validator: _validateSenha,
-                            keyboardType: TextInputType.text,
-                            obscureText: true,
-                            maxLength: 15,
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                            decoration: TextFieldDecoration.FieldDecoration(),
-                          ),
-                        ),
-                      ),
- */

@@ -10,7 +10,7 @@ class DateUtils{
 
     DateTime dataTime = DateTime.now();
 
-    var dateFormated = DateFormat("DD/MM/yyyy HH:MM","pt_BR");
+    var dateFormated = DateFormat("dd/MM/yyyy HH:MM","pt_BR");
     dateFormated.format(dataTime);
 
     return  dateFormated.format(dataTime);

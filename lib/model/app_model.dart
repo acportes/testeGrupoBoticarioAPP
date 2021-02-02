@@ -1,9 +1,10 @@
-import 'dart:math';
+import 'dart:convert' as convert;
 
 import 'package:flutter/material.dart';
 import 'package:microblogging_boticario/model/domain/news.dart';
 import 'package:microblogging_boticario/model/domain/posts.dart';
 import 'package:microblogging_boticario/model/domain/user.dart';
+import 'package:microblogging_boticario/utils/prefs.dart';
 import 'package:microblogging_boticario/utils/randomUtils.dart';
 import 'package:microblogging_boticario/view/dashBoard/dashBoard_page.dart';
 
@@ -12,6 +13,8 @@ enum AppStates { login, logado, onHome, onNewPost, onNewUser, onLastNews }
 enum PageTitle { home, newUser, lastNews }
 
 class AppModel extends ChangeNotifier {
+  static final String APP_DATA = "APP_DATA";
+
   Widget page;
   DataUser dataUser;
   Usuario logedUser;
@@ -33,12 +36,12 @@ class AppModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  setUsers(DataUser dataUser){
+  setUsers(DataUser dataUser) {
     this.dataUser = dataUser;
     notifyListeners();
   }
 
-  setLogout(){
+  setLogout() {
     this.states = AppStates.login;
     notifyListeners();
   }
@@ -76,14 +79,23 @@ class AppModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  refreshUserPosts(userPosts){
+  refreshUserPosts(userPosts) {
     this.logedUser.userPosts = userPosts;
     notifyListeners();
   }
 
-  setNewPost(post){
+  setNewPost(post) {
     post.id = RandomUtils.generateGUID();
-    this.logedUser.userPosts.add(post);
+
+    var user = dataUser.users.where((u) => logedUser.id == u.id).first;
+    user.userPosts.add(post);
     notifyListeners();
+  }
+
+  saveAppData() {
+    if (dataUser != null) {
+      final json = convert.json.encode(dataUser.toJson());
+      Prefs.setString(APP_DATA, json);
+    }
   }
 }

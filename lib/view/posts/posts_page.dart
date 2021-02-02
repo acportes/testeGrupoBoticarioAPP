@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:microblogging_boticario/model/app_model.dart';
-import 'package:microblogging_boticario/model/domain/posts.dart';
-import 'package:microblogging_boticario/model/domain/user.dart';
-import 'package:microblogging_boticario/view/posts/listPostsPage.dart';
 import 'package:microblogging_boticario/view/posts/postCard.dart';
 import 'package:provider/provider.dart';
 

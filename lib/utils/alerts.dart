@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'app_colors.dart';
@@ -25,8 +26,12 @@ customAlert(BuildContext context, String title, String msg, AlertType type,
           type: type,
           title: title,
           style: AlertStyle(
-            titleStyle: TextStyle(fontSize: 25),
-            descStyle: TextStyle(fontSize: 15),
+            titleStyle: TextStyle(
+              fontSize: ScreenUtil().setSp(25, allowFontScalingSelf: true),
+            ),
+            descStyle: TextStyle(
+              fontSize: ScreenUtil().setSp(15, allowFontScalingSelf: true),
+            ),
             isOverlayTapDismiss: false,
             isCloseButton: false,
           ),

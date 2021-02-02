@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:microblogging_boticario/controller/users_controller.dart';
 import 'package:microblogging_boticario/model/app_model.dart';
 import 'package:microblogging_boticario/model/domain/user.dart';
-import 'package:microblogging_boticario/model/service/user_service.dart';
 import 'package:microblogging_boticario/utils/alerts.dart';
 import 'package:microblogging_boticario/utils/app_colors.dart';
 import 'package:microblogging_boticario/utils/textFieldDecoration.dart';
@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   UsersController controller = UsersController();
 
-  final _ctrlEmail = TextEditingController(text: "andrecportes@email.com");
+  final _ctrlEmail = TextEditingController(text: "luiz_pontes@email.com");
   final _ctrlSenha = TextEditingController(text: "1234");
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -29,15 +29,15 @@ class _LoginPageState extends State<LoginPage> {
     AppModel app = Provider.of<AppModel>(context, listen: true);
 
     return Container(
-      width: size.width,
-      height: size.height,
+      width: ScreenUtil().setWidth(size.width),
+      height: ScreenUtil().setHeight(size.height),
       color: AppColors.getPrimaryColor(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 100,
-            height: 100,
+            width: ScreenUtil().setWidth(100),
+            height: ScreenUtil().setWidth(100),
             child: Image.asset(
               "assets/images/splash.png",
             ),
@@ -46,44 +46,34 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(16.0),
             child: Form(
               key: _formKey,
-              child: Container(
-                width: size.width,
-                height: 300,
-                child: _progress
-                    ? Container(
-                        width: 35,
-                        height: 35,
-                        child: CircularProgressIndicator(
-                          backgroundColor: AppColors.getPrimaryDarkColor(),
-                          valueColor: AlwaysStoppedAnimation(
-                            AppColors.getPrimaryColor(),
-                          ),
-                        ),
-                      )
-                    : Card(
+              child: _progress
+                  ? CircularProgressIndicator(
+                      backgroundColor: AppColors.getPrimaryDarkColor(),
+                      valueColor: AlwaysStoppedAnimation(
+                        AppColors.getPrimaryColor(),
+                      ),
+                    )
+                  : Container(
+                      width: ScreenUtil().setWidth(
+                          size.width >= 720 ? size.width - 400 : size.width),
+                      height: ScreenUtil().setHeight(300),
+                      child: Card(
                         elevation: 10,
                         shape: RoundedRectangleBorder(
                           side: BorderSide(color: Colors.white70, width: 1.5),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 40, top: 32),
-                                  child: Text(
-                                    "E-mail",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: AppColors.getPrimaryDarkColor(),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
+                                size.width >= 720
+                                    ? _fieldEmailLargePadding()
+                                    : _fieldEmailSmallPadding(),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -93,21 +83,23 @@ class _LoginPageState extends State<LoginPage> {
                                       child: Icon(
                                         Icons.person,
                                         color: AppColors.getPrimaryDarkColor(),
+                                        size: ScreenUtil().setHeight(30),
                                       ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(
                                           left: 8.0, right: 8.0, top: 8),
                                       child: Container(
-                                        height: 60,
-                                        width: 280,
+                                        height: ScreenUtil().setHeight(60),
+                                        width: ScreenUtil().setWidth(260),
                                         child: TextFormField(
                                           controller: _ctrlEmail,
                                           validator: _validateEmail,
                                           keyboardType: TextInputType.text,
                                           maxLength: 25,
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: ScreenUtil().setSp(16,
+                                                allowFontScalingSelf: true),
                                           ),
                                           decoration: TextFieldDecoration
                                               .FieldDecoration(),
@@ -123,11 +115,12 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 Padding(
                                   padding:
-                                      const EdgeInsets.only(left: 40, top: 8),
+                                      const EdgeInsets.only(left: 45, top: 8),
                                   child: Text(
                                     "Senha",
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: ScreenUtil().setSp(16,
+                                          allowFontScalingSelf: true),
                                       color: AppColors.getPrimaryDarkColor(),
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -142,14 +135,15 @@ class _LoginPageState extends State<LoginPage> {
                                       child: Icon(
                                         Icons.lock,
                                         color: AppColors.getPrimaryDarkColor(),
+                                        size: ScreenUtil().setHeight(30),
                                       ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(
                                           left: 8.0, right: 8.0, top: 8),
                                       child: Container(
-                                        height: 60,
-                                        width: 280,
+                                        height: ScreenUtil().setHeight(60),
+                                        width: ScreenUtil().setWidth(260),
                                         child: TextFormField(
                                           controller: _ctrlSenha,
                                           validator: _validateSenha,
@@ -157,7 +151,8 @@ class _LoginPageState extends State<LoginPage> {
                                           maxLength: 10,
                                           obscureText: true,
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: ScreenUtil().setSp(16,
+                                                allowFontScalingSelf: true),
                                           ),
                                           decoration: TextFieldDecoration
                                               .FieldDecoration(),
@@ -169,23 +164,24 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 16.0),
+                              padding: const EdgeInsets.only(top: 16.0, bottom: 8),
                               child: Center(
                                 child: Container(
-                                  width: 200,
-                                  height: 45,
+                                  width: ScreenUtil().setWidth(200),
+                                  height: ScreenUtil().setHeight(45),
                                   child: RaisedButton(
                                     color: AppColors.getPrimaryColor(),
                                     child: Text(
                                       "LOGIN",
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: ScreenUtil().setSp(16,
+                                            allowFontScalingSelf: true),
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     onPressed: () {
-                                      _onClickLogin(app);
+                                      _onClickLogin(app, size);
                                     },
                                   ),
                                 ),
@@ -194,10 +190,33 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ),
-              ),
+                    ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  _fieldEmailSmallPadding() {
+    return Padding(
+        padding: const EdgeInsets.only(left: 45, top: 32),
+        child: _textField("Email"));
+  }
+
+  _fieldEmailLargePadding() {
+    return Padding(
+        padding: const EdgeInsets.only(left: 68, top: 32),
+        child: _textField("Email"));
+  }
+
+  _textField(text) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: ScreenUtil().setSp(16, allowFontScalingSelf: true),
+        color: AppColors.getPrimaryDarkColor(),
+        fontWeight: FontWeight.bold,
       ),
     );
   }
@@ -212,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  _onClickLogin(app) async {
+  _onClickLogin(app, size) async {
     final email = _ctrlEmail.text;
     final senha = _ctrlSenha.text;
 
@@ -230,7 +249,7 @@ class _LoginPageState extends State<LoginPage> {
       }
       app.setLogin(logedUser);
     } catch (e) {
-      String mensagem = e.toString();
+      String mensagem = e.toString().replaceAll("Exception: ", "");
       alert(context, "Erro", "Ocorreu um erro ao realizar o login : $mensagem",
           TipoDialog.DIALOG_ERRO);
     } finally {

@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:microblogging_boticario/controller/news_controller.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:microblogging_boticario/model/app_model.dart';
-import 'package:microblogging_boticario/model/service/user_service.dart';
 import 'package:microblogging_boticario/utils/alerts.dart';
 import 'package:microblogging_boticario/utils/app_colors.dart';
 import 'package:microblogging_boticario/view/login/login_page.dart';
-import 'package:microblogging_boticario/view/news/cardNews.dart';
 import 'package:microblogging_boticario/view/news/lastNews_page.dart';
 import 'package:microblogging_boticario/view/posts/newPost_page.dart';
-import 'package:microblogging_boticario/view/posts/postCard.dart';
 import 'package:microblogging_boticario/view/posts/posts_page.dart';
 import 'package:microblogging_boticario/view/usuario/cadastroUsuario_page.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
-import 'menu.dart';
 
 class DashBoardPage extends StatefulWidget {
   @override
@@ -47,20 +42,34 @@ class _DashBoardPageState extends State<DashBoardPage>
                 ),
                 color: AppColors.getPrimaryColor()),
             child: Scaffold(
-              appBar: AppBar(
-                title: Text(app.pageTitle),
-                actions: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.exit_to_app,
-                      size: 30,
-                      color: Colors.white,
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(
+                  ScreenUtil().setWidth(40),
+                ),
+                child: AppBar(
+                  backgroundColor: AppColors.getPrimaryColor(),
+                  title: Text(
+                    app.pageTitle,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(25),
                     ),
-                    onPressed: () {
-                      onClickLogout(app);
-                    },
                   ),
-                ],
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right:16.0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.exit_to_app,
+                          size: ScreenUtil().setWidth(30),
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          onClickLogout(app);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerDocked,
@@ -72,16 +81,22 @@ class _DashBoardPageState extends State<DashBoardPage>
   }
 
   floatingButton(app) {
-    return FloatingActionButton(
-      backgroundColor: AppColors.getPrimaryColor(),
-      child: Icon(
-        app.states == AppStates.onHome ? Icons.add : Icons.home,
-        color: Colors.white,
+    return Container(
+      width: ScreenUtil().setWidth(60),
+      height: ScreenUtil().setHeight(50),
+      child: FloatingActionButton(
+        backgroundColor: AppColors.getPrimaryColor(),
+        child: Icon(
+          app.states == AppStates.onHome ? Icons.add : Icons.home,
+          color: Colors.white,
+          size: ScreenUtil().setWidth(25),
+        ),
+        tooltip:
+            app.states == AppStates.onHome ? "Adicionar novo post" : "Home",
+        onPressed: () {
+          onClickNavigationButton(app);
+        },
       ),
-      tooltip: app.states == AppStates.onHome ? "Adicionar novo post" : "Home",
-      onPressed: () {
-        onClickNavigationButton(app);
-      },
     );
   }
 
@@ -89,7 +104,8 @@ class _DashBoardPageState extends State<DashBoardPage>
     return BottomAppBar(
       shape: CircularNotchedRectangle(),
       child: Container(
-        height: 56,
+        color: Colors.white70,
+        height: ScreenUtil().setWidth(56),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -97,8 +113,8 @@ class _DashBoardPageState extends State<DashBoardPage>
                 icon: Icon(
                   Icons.person_add_alt_1_rounded,
                   color: AppColors.getPrimaryDarkColor(),
+                  size: ScreenUtil().setWidth(25),
                 ),
-                //highlightColor: AppColors.getPrimaryDarkColor(),
                 tooltip: "Criar usuário",
                 onPressed: () {
                   onClickOnNewUser();
@@ -108,6 +124,8 @@ class _DashBoardPageState extends State<DashBoardPage>
                 icon: Icon(
                   Icons.article_rounded,
                   color: AppColors.getPrimaryDarkColor(),
+                  size: ScreenUtil().setWidth(25),
+
                 ),
                 tooltip: "Novidades Boticário",
                 onPressed: () {
@@ -140,25 +158,6 @@ class _DashBoardPageState extends State<DashBoardPage>
           return home(app);
         }
     }
-  }
-
-  main() {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "MicroBlogging - Boticário",
-        ),
-        backgroundColor: AppColors.getPrimaryDarkColor(),
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            PostsPage(),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Menu(),
-    );
   }
 
   home(app) {
@@ -194,22 +193,29 @@ class _DashBoardPageState extends State<DashBoardPage>
           color: Colors.white,
           child: Text(
             "CANCELAR",
-            style: TextStyle(color: AppColors.getPrimaryColor(), fontSize: 15),
+            style: TextStyle(
+              color: AppColors.getPrimaryColor(),
+              fontSize: ScreenUtil().setSp(15),
+            ),
           ),
           onPressed: () => Navigator.pop(context),
-          width: 150,
+          width: ScreenUtil().setWidth(150),
         ),
         DialogButton(
           color: Colors.white,
           child: Text(
             "CONFIRMAR",
-            style: TextStyle(color: AppColors.getPrimaryColor(), fontSize: 15),
+            style: TextStyle(
+              color: AppColors.getPrimaryColor(),
+              fontSize: ScreenUtil().setSp(15, allowFontScalingSelf: true),
+            ),
           ),
           onPressed: () {
+            Provider.of<AppModel>(context, listen: false).saveAppData();
             Navigator.of(context).popUntil((route) => route.isFirst);
             app.setLogout();
           },
-          width: 250,
+          width: ScreenUtil().setWidth(250),
         ),
       ],
     );

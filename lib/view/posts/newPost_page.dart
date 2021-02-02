@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:microblogging_boticario/controller/posts_controller.dart';
 import 'package:microblogging_boticario/model/app_model.dart';
 import 'package:microblogging_boticario/model/domain/posts.dart';
@@ -46,8 +47,8 @@ class _NewPostPageState extends State<NewPostPage>
       child: Material(
         color: Colors.transparent,
         child: Container(
-          height: size.height - 185,
-          width: size.width - 50,
+          height: ScreenUtil().setHeight(466),
+          width: ScreenUtil().setWidth(320),
           decoration: ShapeDecoration(
               color: Colors.white,
               shape: RoundedRectangleBorder(
@@ -66,7 +67,7 @@ class _NewPostPageState extends State<NewPostPage>
       child: Form(
         key: _formKey,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Align(
               alignment: Alignment.center,
@@ -75,7 +76,7 @@ class _NewPostPageState extends State<NewPostPage>
                 style: TextStyle(
                   color: AppColors.getPrimaryColor(),
                   fontWeight: FontWeight.bold,
-                  fontSize: 24,
+                  fontSize: ScreenUtil().setSp(24, allowFontScalingSelf: true),
                 ),
               ),
             ),
@@ -88,18 +89,24 @@ class _NewPostPageState extends State<NewPostPage>
                     style: TextStyle(
                       color: AppColors.getPrimaryColor(),
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize:
+                          ScreenUtil().setSp(18, allowFontScalingSelf: true),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 32.0),
-                  child: Text(
-                    app.logedUser.nome,
-                    style: TextStyle(
-                      color: AppColors.getPrimaryDarkColor(),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                  child: Container(
+                    width: ScreenUtil().setWidth(230),
+                    child: Text(
+                      app.logedUser.nome,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: AppColors.getPrimaryDarkColor(),
+                        fontWeight: FontWeight.bold,
+                        fontSize:
+                            ScreenUtil().setSp(18, allowFontScalingSelf: true),
+                      ),
                     ),
                   ),
                 ),
@@ -112,15 +119,15 @@ class _NewPostPageState extends State<NewPostPage>
                 style: TextStyle(
                   color: Colors.black.withOpacity(0.3),
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: ScreenUtil().setSp(18, allowFontScalingSelf: true),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 32.0),
               child: Container(
-                width: size.width,
-                height: 170,
+                width: ScreenUtil().setWidth(size.width),
+                height: ScreenUtil().setHeight(170),
                 child: TextFormField(
                   keyboardType: TextInputType.text,
                   maxLength: 280,
@@ -128,7 +135,8 @@ class _NewPostPageState extends State<NewPostPage>
                   controller: _ctrlText,
                   validator: _validateText,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize:
+                        ScreenUtil().setSp(16, allowFontScalingSelf: true),
                   ),
                   decoration: TextFieldDecoration.FieldDecoration(),
                 ),
@@ -138,7 +146,7 @@ class _NewPostPageState extends State<NewPostPage>
               padding: const EdgeInsets.only(top: 8.0),
               child: Container(
                 width: size.width,
-                height: 40,
+                height: ScreenUtil().setHeight(40),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: AppColors.getPrimaryColor(),
@@ -146,7 +154,8 @@ class _NewPostPageState extends State<NewPostPage>
                   child: Text(
                     _editMode ? "SALVAR" : "CRIAR",
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize:
+                          ScreenUtil().setSp(16, allowFontScalingSelf: true),
                       color: Colors.white,
                     ),
                   ),
@@ -183,7 +192,12 @@ class _NewPostPageState extends State<NewPostPage>
         widget.post.date = data;
         await controller.editPost(context, widget.post);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Post editado com sucesso!"),
+          content: Text(
+            "Post editado com sucesso!",
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(20),
+            ),
+          ),
           duration: const Duration(seconds: 5),
         ));
       } else {
@@ -192,7 +206,12 @@ class _NewPostPageState extends State<NewPostPage>
         post.text = text;
         await controller.savePost(context, post);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Post criado com sucesso!"),
+          content: Text(
+            "Post criado com sucesso!",
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(20),
+            ),
+          ),
           duration: const Duration(seconds: 5),
         ));
       }
@@ -200,6 +219,9 @@ class _NewPostPageState extends State<NewPostPage>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           e.toString().replaceAll("Exception: ", ""),
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(20),
+          ),
         ),
         duration: const Duration(seconds: 5),
       ));

@@ -10,7 +10,7 @@ class Usuario {
   String email;
   String senha;
   String image;
-  List<Posts> userPosts;
+  List<Posts> userPosts = List<Posts>();
 
   Usuario({this.id, this.nome, this.email, this.senha, this.image, this.userPosts});
 
@@ -22,7 +22,7 @@ class Usuario {
 
 @JsonSerializable()
 class DataUser {
-  List<Usuario> users;
+  List<Usuario> users = List<Usuario>();
 
   DataUser({this.users});
 

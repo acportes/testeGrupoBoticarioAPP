@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity/connectivity.dart';
-import 'package:http/http.dart' as http;
 
 enum RequisitionType { POST, GET }
 
@@ -14,13 +13,7 @@ class Requisitor {
 
       var request = await httpClient
           .getUrl(Uri.parse(url))
-          .timeout(Duration(seconds: TIMEOUT_SECONDS))
-          .catchError(
-        (error) {
-          throw new Exception("TIMEOUT : O servidor remoto está indisponível "
-              "ou não respondeu em tempo hábil");
-        },
-      );
+          .timeout(Duration(seconds: TIMEOUT_SECONDS));
 
       var response = await request.close();
 
@@ -35,40 +28,8 @@ class Requisitor {
         throw new Exception(
             "O servidor remoto não foi encontrado. \nVerifique o endereço e tente novamente.");
       }
-
-      /* final response = await http
-          .get(
-            url,
-            headers: {"Content-Type": "application/json",},
-          )
-          .timeout(Duration(seconds: TIMEOUT_SECONDS))
-          .catchError(
-            (error) {
-              throw new Exception(
-                  "TIMEOUT : O servidor remoto está indisponível "
-                  "ou não respondeu em tempo hábil");
-            },
-          );
-
-      if (response.statusCode == HttpStatus.ok) {
-        return await response.transform(utf8.decoder).join();
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-      }  } else if (response.statusCode == HttpStatus.requestTimeout) {
-        throw new Exception(
-            "TIMEOUT : O servidor remoto está indisponível ou não respondeu em tempo hábil");
-      } else if (response.statusCode == HttpStatus.notFound) {
-        throw new Exception(
-            "O servidor remoto não foi encontrado. \nVerifique o endereço e tente novamente.");*/
     } on Exception catch (e) {
       throw e;
     }
-  }
-
-  static Future<bool> checkConnectivity() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-
-    if (connectivityResult == ConnectivityResult.none) return false;
-
-    return true;
   }
 }

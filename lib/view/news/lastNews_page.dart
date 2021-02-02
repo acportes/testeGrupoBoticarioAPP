@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:microblogging_boticario/controller/news_controller.dart';
 import 'package:microblogging_boticario/model/app_model.dart';
 import 'package:microblogging_boticario/utils/app_colors.dart';
@@ -26,8 +27,8 @@ class _LastNewsPageState extends State<LastNewsPage> {
     AppModel app = Provider.of<AppModel>(context, listen: true);
     return app.lastNews == null
         ? Container(
-            height: size.height,
-            width: size.width,
+            height: ScreenUtil().setHeight(size.height),
+            width: ScreenUtil().setWidth(size.width),
             child: Align(
               alignment: Alignment.center,
               child: CircularProgressIndicator(
@@ -42,18 +43,19 @@ class _LastNewsPageState extends State<LastNewsPage> {
   }
 
   contentLayout(app) {
-    return Container(
-      child: SingleChildScrollView(
-        child: Container(
-          width: size.width,
-          height: size.height,
-          child: ListView.builder(
-              itemCount: app.lastNews.news.length,
-              itemBuilder: (context, index) {
-                var news = app.lastNews.news[index];
-                return CardNews(news);
-              }),
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: app.lastNews.news.length,
+            itemBuilder: (context, i) {
+              var news = app.lastNews.news[i];
+              return CardNews(news);
+            },
+          ),
+        ],
       ),
     );
   }

@@ -38,7 +38,11 @@ dependencies:
   cached_network_image: ^2.5.0
   flutter_login: ^1.0.14
   uuid: 2.2.2
-
+  splashscreen: ^1.3.5
+  email_validator: '^1.0.5'
+  flutter_launcher_icons: ^0.8.1
+  responsive_framework: ^0.0.14
+  flutter_screenutil: ^4.0.2+8
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -48,6 +52,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/b.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
